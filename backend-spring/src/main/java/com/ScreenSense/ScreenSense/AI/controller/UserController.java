@@ -38,7 +38,7 @@ public class UserController {
         if (user != null && passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
 
             String token = jwtUtils.generateToken(user.getEmail());
-            return ResponseEntity.ok(new AuthResponse(token, user.getName()));
+            return ResponseEntity.ok(new AuthResponse(token, user.getId()));
         } else {
             return ResponseEntity.status(401).body("Invalid Credentials");
         }
@@ -57,15 +57,15 @@ public class UserController {
         boolean isRegister = userService.register(user);
         if (isRegister) {
             String token = jwtUtils.generateToken(user.getEmail());
-            return ResponseEntity.ok(new AuthResponse(token, user.getName()));
+            return ResponseEntity.ok(new AuthResponse(token, user.getId()));
         }
         return ResponseEntity.status(401).body("Error: Email is already in use!");
     }
 
-    @GetMapping("/profile")
-    public ResponseEntity<ProfileResponse> getProfile(@RequestParam String email){
+    @GetMapping("/profile/{userId}")
+    public ResponseEntity<ProfileResponse> getProfile(@PathVariable int userId) {
 
-        ProfileResponse profileResponse = userService.getProfile(email);
+        ProfileResponse profileResponse = userService.getProfile(userId);
         if (profileResponse == null) {
             return ResponseEntity.notFound().build();
         }

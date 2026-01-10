@@ -42,9 +42,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ProfileResponse getProfile(String email) {
+    public ProfileResponse getProfile(int userId) {
 
-        Optional<User> user =  userRepo.findByEmail(email);
+        Optional<User> user =  userRepo.findById(userId);
 
         return user.map(value -> modelMapper.map(value, ProfileResponse.class)).orElse(null);
     }

@@ -14,7 +14,7 @@ public interface UserService {
 
     public boolean checkEmail(String email);
 
-    public ProfileResponse getProfile(String email);
+    public ProfileResponse getProfile(int userId);
 
     public String updateProfile(String email, ProfileUpdateRequest profileUpdateRequest);
 }
