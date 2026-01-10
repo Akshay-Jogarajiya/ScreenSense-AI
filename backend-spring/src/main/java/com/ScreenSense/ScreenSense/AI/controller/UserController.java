@@ -2,6 +2,7 @@ package com.ScreenSense.ScreenSense.AI.controller;
 
 import com.ScreenSense.ScreenSense.AI.dto.LoginRequest;
 import com.ScreenSense.ScreenSense.AI.dto.ProfileResponse;
+import com.ScreenSense.ScreenSense.AI.dto.ProfileUpdateRequest;
 import com.ScreenSense.ScreenSense.AI.entity.User;
 import com.ScreenSense.ScreenSense.AI.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,5 +53,12 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(profileResponse);
+    }
+
+    @PutMapping("/profile/update/{email}")
+    public ResponseEntity<String> updateProfile(@PathVariable String email, @RequestBody ProfileUpdateRequest profileUpdateRequest) {
+
+        String message = userService.updateProfile(email, profileUpdateRequest);
+        return ResponseEntity.ok(message);
     }
 }
