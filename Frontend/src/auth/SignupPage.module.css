@@ -1,0 +1,612 @@
+/* ============================================
+   CONTAINER & BACKGROUND
+   ============================================ */
+   html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  background: #0B0F14;
+}
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #0B0F14;
+  position: relative;
+  overflow: hidden;
+  padding: 40px 20px;
+}
+
+/* Animated Background Particles */
+.bgParticles {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.particle1,
+.particle2,
+.particle3 {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.3;
+  animation: float 20s infinite ease-in-out;
+}
+
+.particle1 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, #3B82F6 0%, transparent 70%);
+  top: -100px;
+  left: -100px;
+  animation-delay: 0s;
+}
+
+.particle2 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, #8B5CF6 0%, transparent 70%);
+  bottom: -150px;
+  right: -150px;
+  animation-delay: 7s;
+}
+
+.particle3 {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, #22D3EE 0%, transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation-delay: 14s;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(50px, -50px) scale(1.1);
+  }
+  66% {
+    transform: translate(-30px, 30px) scale(0.9);
+  }
+}
+
+/* Scanning Line Animation */
+.scanLine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #22D3EE 50%,
+    transparent 100%
+  );
+  animation: scan 3s linear infinite;
+  z-index: 1;
+  opacity: 0.5;
+}
+
+@keyframes scan {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+/* ============================================
+   FORM CONTAINER
+   ============================================ */
+.form {
+  position: relative;
+  z-index: 10;
+  background: rgba(18, 24, 38, 0.8);
+  backdrop-filter: blur(20px);
+  padding: 40px;
+  width: 100%;
+  max-width: 500px;
+  border-radius: 16px;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.form::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #3B82F6,
+    #8B5CF6,
+    #22D3EE,
+    transparent
+  );
+  animation: borderGlow 3s linear infinite;
+}
+
+@keyframes borderGlow {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* ============================================
+   LOGO & STATUS
+   ============================================ */
+.logoContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.logoGlow {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    0 0 30px rgba(59, 130, 246, 0.5),
+    0 0 60px rgba(139, 92, 246, 0.3);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 
+      0 0 30px rgba(59, 130, 246, 0.5),
+      0 0 60px rgba(139, 92, 246, 0.3);
+  }
+  50% {
+    box-shadow: 
+      0 0 50px rgba(59, 130, 246, 0.8),
+      0 0 100px rgba(139, 92, 246, 0.5);
+  }
+}
+
+.logo {
+  width: 35px;
+  height: 35px;
+  color: #E5E7EB;
+}
+
+.statusBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(34, 211, 238, 0.1);
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  color: #22D3EE;
+  margin-bottom: 24px;
+  font-weight: 500;
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  background: #22D3EE;
+  border-radius: 50%;
+  animation: blink 2s ease-in-out infinite;
+  box-shadow: 0 0 10px #22D3EE;
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+/* ============================================
+   TITLE
+   ============================================ */
+.title {
+  text-align: center;
+  margin-bottom: 32px;
+  color: #E5E7EB;
+  font-size: 28px;
+  font-weight: 700;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  letter-spacing: -0.5px;
+}
+
+.subtitle {
+  font-size: 13px;
+  color: #9CA3AF;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================
+   FORM GRID & FIELDS
+   ============================================ */
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.field label {
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #9CA3AF;
+  font-size: 13px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.inputWrapper {
+  position: relative;
+  margin-right: 2rem;
+}
+
+.input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(11, 15, 20, 0.6);
+  color: #E5E7EB;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.input::placeholder {
+  color: #6B7280;
+}
+
+.input:focus {
+  border-color: #3B82F6;
+  background: rgba(11, 15, 20, 0.8);
+  box-shadow: 
+    0 0 0 3px rgba(59, 130, 246, 0.1),
+    0 0 20px rgba(59, 130, 246, 0.2);
+}
+
+.input:focus + .inputGlow {
+  opacity: 1;
+}
+
+.inputGlow {
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+  opacity: 0;
+  filter: blur(20px);
+  z-index: -1;
+  transition: opacity 0.3s ease;
+}
+
+/* Select Dropdown Styling */
+select.input {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%239CA3AF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 40px;
+  cursor: pointer;
+}
+
+select.input option {
+  background: #121826;
+  color: #E5E7EB;
+  padding: 10px;
+}
+
+/* ============================================
+   CHECKBOX
+   ============================================ */
+.checkboxContainer {
+  margin-bottom: 20px;
+}
+
+.checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+  position: relative;
+  padding: 16px;
+  background: rgba(11, 15, 20, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.checkbox:hover {
+  background: rgba(11, 15, 20, 0.6);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.checkbox input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.checkmark {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  background: rgba(11, 15, 20, 0.6);
+  flex-shrink: 0;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.checkbox input[type="checkbox"]:checked ~ .checkmark {
+  background: linear-gradient(135deg, #3B82F6, #8B5CF6);
+  border-color: #3B82F6;
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+}
+
+.checkbox input[type="checkbox"]:checked ~ .checkmark::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid #E5E7EB;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.checkboxText {
+  color: #9CA3AF;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.checkbox:hover .checkboxText {
+  color: #E5E7EB;
+}
+
+/* ============================================
+   BUTTON
+   ============================================ */
+.button {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+  color: #E5E7EB;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  margin-top: 8px;
+  letter-spacing: 0.5px;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 8px 20px rgba(59, 130, 246, 0.4),
+    0 0 40px rgba(139, 92, 246, 0.3);
+}
+
+.button:active {
+  transform: translateY(0);
+}
+
+.buttonText {
+  position: relative;
+  z-index: 2;
+}
+
+.buttonGlow {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transform: rotate(45deg);
+  animation: buttonShine 3s linear infinite;
+}
+
+@keyframes buttonShine {
+  0% {
+    transform: translateX(-100%) rotate(45deg);
+  }
+  100% {
+    transform: translateX(100%) rotate(45deg);
+  }
+}
+
+/* ============================================
+   DIVIDER
+   ============================================ */
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 24px 0;
+  color: #6B7280;
+  font-size: 13px;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.divider span {
+  padding: 0 16px;
+}
+
+/* ============================================
+   TEXT & LINK
+   ============================================ */
+.text {
+  text-align: center;
+  margin-top: 0;
+  color: #9CA3AF;
+  font-size: 14px;
+}
+
+.link {
+  color: #3B82F6;
+  text-decoration: none;
+  font-weight: 600;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.link:hover {
+  color: #22D3EE;
+}
+
+.link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #3B82F6, #22D3EE);
+  transition: width 0.3s ease;
+}
+
+.link:hover::after {
+  width: 100%;
+}
+
+/* ============================================
+   PROCESSING INDICATOR
+   ============================================ */
+.processingIndicator {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 24px;
+  opacity: 0.5;
+}
+
+.processingDot {
+  width: 6px;
+  height: 6px;
+  background: #3B82F6;
+  border-radius: 50%;
+  animation: wave 1.4s ease-in-out infinite;
+}
+
+.processingDot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.processingDot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes wave {
+  0%, 60%, 100% {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  30% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   BOTTOM TEXT
+   ============================================ */
+.bottomText {
+  position: relative;
+  z-index: 10;
+  margin-top: 24px;
+  color: #6B7280;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.aiIcon {
+  font-size: 16px;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 560px) {
+  .form {
+    padding: 32px 24px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .subtitle {
+    font-size: 12px;
+  }
+
+  .checkboxText {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 400px) {
+  .container {
+    padding: 20px 12px;
+  }
+
+  .form {
+    padding: 28px 20px;
+  }
+}
