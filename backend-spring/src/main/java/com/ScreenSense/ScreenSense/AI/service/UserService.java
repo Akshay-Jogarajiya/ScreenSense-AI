@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 
 public interface UserService {
 
-    public boolean login(LoginRequest loginRequest);
+    public User login(LoginRequest loginRequest);
 
     public boolean register(User user);
 

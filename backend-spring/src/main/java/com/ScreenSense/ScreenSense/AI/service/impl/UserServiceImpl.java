@@ -22,10 +22,10 @@ public class UserServiceImpl implements UserService {
     ModelMapper modelMapper = new ModelMapper();
 
     @Override
-    public boolean login(LoginRequest loginRequest) {
+    public User login(LoginRequest loginRequest) {
 
-        Optional<User> user = userRepo.findByEmailAndPassword(loginRequest.getEmail(), loginRequest.getPassword());
-        return user.isPresent();
+        Optional<User> user = userRepo.findByEmail(loginRequest.getEmail());
+        return user.orElse(null);
     }
 
     @Override
