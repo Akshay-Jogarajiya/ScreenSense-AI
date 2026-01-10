@@ -25,4 +25,8 @@ public class User {
     private String gender;
 
     private String deviceType;
+
+    private String goal;
+
+    private String time;
 }

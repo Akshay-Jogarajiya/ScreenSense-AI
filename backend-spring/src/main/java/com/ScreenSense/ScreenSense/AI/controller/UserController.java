@@ -1,14 +1,14 @@
 package com.ScreenSense.ScreenSense.AI.controller;
 
 import com.ScreenSense.ScreenSense.AI.dto.LoginRequest;
+import com.ScreenSense.ScreenSense.AI.dto.ProfileResponse;
 import com.ScreenSense.ScreenSense.AI.entity.User;
 import com.ScreenSense.ScreenSense.AI.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 
 @RestController()
@@ -42,5 +42,15 @@ public class UserController {
             return ResponseEntity.ok("Register Successful!");
         }
         return ResponseEntity.status(401).body("Error: Email is already in use!");
+    }
+
+    @GetMapping("/profile/{email}")
+    public ResponseEntity<ProfileResponse> getProfile(@PathVariable String email){
+
+        ProfileResponse profileResponse = userService.getProfile(email);
+        if (profileResponse == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(profileResponse);
     }
 }
