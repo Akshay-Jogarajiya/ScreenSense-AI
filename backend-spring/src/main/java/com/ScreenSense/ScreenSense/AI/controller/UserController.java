@@ -54,10 +54,10 @@ public class UserController {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
 
-        boolean isRegister = userService.register(user);
-        if (isRegister) {
-            String token = jwtUtils.generateToken(user.getEmail());
-            return ResponseEntity.ok(new AuthResponse(token, user.getId()));
+        User registredUser = userService.register(user);
+        if (registredUser != null) {
+            String token = jwtUtils.generateToken(registredUser.getEmail());
+            return ResponseEntity.ok(new AuthResponse(token, registredUser.getId()));
         }
         return ResponseEntity.status(401).body("Error: Email is already in use!");
     }

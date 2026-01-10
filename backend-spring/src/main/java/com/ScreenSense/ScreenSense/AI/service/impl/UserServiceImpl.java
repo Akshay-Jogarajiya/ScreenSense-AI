@@ -29,10 +29,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean register(User user) {
+    public User register(User user) {
 
-        userRepo.save(user);
-        return true;
+        return userRepo.save(user);
     }
 
     @Override

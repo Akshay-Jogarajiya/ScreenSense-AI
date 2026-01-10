@@ -10,7 +10,7 @@ public interface UserService {
 
     public User login(LoginRequest loginRequest);
 
-    public boolean register(User user);
+    public User register(User user);
 
     public boolean checkEmail(String email);
 
