@@ -1,21 +1,94 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./LoginPage.module.css";
+import axios from "axios";
+import api from "../api/axios";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+
+  const validate = () => {
+    const newErrors = {};
+    if (!email) newErrors.email = "Email is required";
+    if (!password) newErrors.password = "Password is required";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (!validate()) return;
+
+  setLoading(true);
+
+  const payload = { email, password };
+  console.log("Payload:", payload);
+
+  try {
+    const response = await api.post(
+      "/user/login",
+      payload,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+console.log('Response: ',response)
+    // Axios auto-parses JSON
+    if (response.status == 200) {
+  localStorage.setItem("token", response.data.token); // ✅ save token
+  localStorage.setItem("userId", response.data.userId); // ✅ save token
+  navigate("/dashboard");
+  console.log("Login success:", response.data);
+}
+
+    // console.log("Login success:", response.data);
+
+    // navigate("/dashboard");
+
+  } catch (error) {
+    console.error("Login Error:", error);
+
+    if (error.response) {
+      // Backend returned error (400, 401, 404, etc.)
+      const message =
+        typeof error.response.data === "string"
+          ? error.response.data
+          : error.response.data.message || "Login failed";
+
+      alert(message);
+
+    } else if (error.request) {
+      // Request sent but no response
+      alert("Server not responding. Please try again later.");
+
+    } else {
+      // Unknown error
+      alert(error.message);
+    }
+
+  } finally {
+    setLoading(false);
+  }
+};
+
+
   return (
     <div className={styles.container}>
-      {/* Animated background particles */}
       <div className={styles.bgParticles}>
         <div className={styles.particle1}></div>
         <div className={styles.particle2}></div>
         <div className={styles.particle3}></div>
       </div>
 
-      {/* Scanning line effect */}
       <div className={styles.scanLine}></div>
 
-      <form className={styles.form}>
-        {/* AI Logo/Icon */}
+      <form className={styles.form} onSubmit={handleSubmit}>
         <div className={styles.logoContainer}>
           <div className={styles.logoGlow}>
             <svg className={styles.logo} viewBox="0 0 24 24" fill="none">
@@ -44,7 +117,6 @@ const LoginPage = () => {
           </div>
         </div>
 
-        {/* AI Status Badge */}
         <div className={styles.statusBadge}>
           <span className={styles.statusDot}></span>
           AI System Active
@@ -61,11 +133,14 @@ const LoginPage = () => {
             <input
               type="email"
               placeholder="Enter your email"
-              required
               className={styles.input}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
             />
             <div className={styles.inputGlow}></div>
           </div>
+          {errors.email && <span className={styles.error}>{errors.email}</span>}
         </div>
 
         <div className={styles.field}>
@@ -74,15 +149,20 @@ const LoginPage = () => {
             <input
               type="password"
               placeholder="Enter your password"
-              required
               className={styles.input}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
             />
             <div className={styles.inputGlow}></div>
           </div>
+          {errors.password && <span className={styles.error}>{errors.password}</span>}
         </div>
 
-        <button type="submit" className={styles.button}>
-          <span className={styles.buttonText}>Initialize Login</span>
+        <button type="submit" className={styles.button} disabled={loading}>
+          <span className={styles.buttonText}>
+            {loading ? "Logging in..." : "Initialize Login"}
+          </span>
           <div className={styles.buttonGlow}></div>
         </button>
 
@@ -97,7 +177,6 @@ const LoginPage = () => {
           </Link>
         </p>
 
-        {/* AI Processing Indicator */}
         <div className={styles.processingIndicator}>
           <div className={styles.processingDot}></div>
           <div className={styles.processingDot}></div>
@@ -105,7 +184,6 @@ const LoginPage = () => {
         </div>
       </form>
 
-      {/* Bottom AI Text */}
       <div className={styles.bottomText}>
         <span className={styles.aiIcon}>🤖</span>
         Powered by Advanced AI Security

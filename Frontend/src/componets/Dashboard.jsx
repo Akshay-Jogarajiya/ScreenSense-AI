@@ -7,10 +7,11 @@ import {
   BarElement,
   ArcElement,
   Tooltip,
-  Legend
+  Legend,
 } from "chart.js";
 import jsPDF from "jspdf";
 import styles from "./Dashboard.module.css";
+import { Navigate, useNavigate } from "react-router-dom";
 
 ChartJS.register(
   CategoryScale,
@@ -26,27 +27,27 @@ const initialData = {
     name: "John Doe",
     email: "john@example.com",
     role: "AI Productivity User",
-    avatar: "https://i.pravatar.cc/100"
+    avatar: "https://i.pravatar.cc/100",
   },
 
   status: {
     tracking: false,
     trackerOffTime: "1h 15m",
     lastActive: "2026-01-10T09:45:00Z",
-    currentTask: "Idle"
+    currentTask: "Idle",
   },
 
   productivity: {
     score: 72,
     totalTime: "7h 10m",
     productiveTime: "4h 30m",
-    wastedTime: "1h 25m"
+    wastedTime: "1h 25m",
   },
 
   apps: [
-    { name: "VS Code", time: 130, openCount: 5, type: "Productive" },
+    { name: "YouTube", time: 70, openCount: 8, type: "Unproductive" },
     { name: "Chrome", time: 100, openCount: 12, type: "Neutral" },
-    { name: "YouTube", time: 70, openCount: 8, type: "Unproductive" }
+    { name: "YouTube", time: 70, openCount: 8, type: "Unproductive" },
   ],
 
   weeklySummary: [
@@ -54,23 +55,59 @@ const initialData = {
     { day: "Tue", productive: 250, wasted: 80, score: 78 },
     { day: "Wed", productive: 230, wasted: 110, score: 72 },
     { day: "Thu", productive: 240, wasted: 100, score: 75 },
-    { day: "Fri", productive: 260, wasted: 90, score: 80 }
-  ]
+    { day: "Fri", productive: 260, wasted: 90, score: 80 },
+  ],
 };
 
 const Dashboard = () => {
   const [data, setData] = useState(initialData);
-
+  const navigate = useNavigate();
   const handleStartTracking = () => {
     console.log("Tracking Started");
-    setData(prev => ({
+    setData((prev) => ({
       ...prev,
-      status: { ...prev.status, tracking: true, currentTask: "Coding" }
+      status: { ...prev.status, tracking: true, currentTask: "Coding" },
     }));
+  };
+  const toggleTracking = async () => {
+    const isTracking = data.status.tracking;
+const userId = localStorage.getItem('userId');
+    const endpoint = isTracking
+      ? "https://unslayable-unfelicitous-karl.ngrok-free.dev/api/tracking/disable"
+      : "https://unslayable-unfelicitous-karl.ngrok-free.dev/api/tracking/enable";
+
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          "ngrok-skip-browser-warning": "true",
+        },
+        body: JSON.stringify({
+          userId: 1,
+        }),
+      });
+
+      const result = await response.json();
+      console.log("Tracking response:", result);
+
+      // ✅ Update UI state after API success
+      setData((prev) => ({
+        ...prev,
+        status: {
+          ...prev.status,
+          tracking: !isTracking,
+          currentTask: !isTracking ? "Tracking Active" : "Idle",
+        },
+      }));
+    } catch (error) {
+      console.error("Tracking toggle error:", error);
+    }
   };
 
   const handleEditProfile = () => {
-    console.log("Edit Profile Clicked");
+    navigate("/profile");
   };
 
   const downloadWeeklyReport = () => {
@@ -125,44 +162,40 @@ const Dashboard = () => {
     /* ====== FOOTER ====== */
     doc.setFontSize(10);
     doc.setTextColor(120);
-    doc.text(
-      "AI-based productivity insights • ScreenSense AI",
-      14,
-      285
-    );
+    doc.text("AI-based productivity insights • ScreenSense AI", 14, 285);
 
     doc.save("Weekly_Productivity_Report.pdf");
   };
 
   const weeklyChart = {
-    labels: data.weeklySummary.map(d => d.day),
+    labels: data.weeklySummary.map((d) => d.day),
     datasets: [
       {
         label: "Productive Time",
-        data: data.weeklySummary.map(d => d.productive),
+        data: data.weeklySummary.map((d) => d.productive),
         backgroundColor: "#3B82F6",
         borderRadius: 8,
-        borderSkipped: false
+        borderSkipped: false,
       },
       {
         label: "Wasted Time",
-        data: data.weeklySummary.map(d => d.wasted),
+        data: data.weeklySummary.map((d) => d.wasted),
         backgroundColor: "#EF4444",
         borderRadius: 8,
-        borderSkipped: false
-      }
-    ]
+        borderSkipped: false,
+      },
+    ],
   };
 
   const appChart = {
-    labels: data.apps.map(a => a.name),
+    labels: data.apps.map((a) => a.name),
     datasets: [
       {
-        data: data.apps.map(a => a.time),
+        data: data.apps.map((a) => a.time),
         backgroundColor: ["#3B82F6", "#8B5CF6", "#22D3EE"],
-        borderWidth: 0
-      }
-    ]
+        borderWidth: 0,
+      },
+    ],
   };
 
   const chartOptions = {
@@ -172,20 +205,20 @@ const Dashboard = () => {
       legend: {
         labels: {
           color: "#9CA3AF",
-          font: { size: 12 }
-        }
-      }
+          font: { size: 12 },
+        },
+      },
     },
     scales: {
       y: {
         grid: { color: "rgba(255,255,255,0.05)" },
-        ticks: { color: "#9CA3AF" }
+        ticks: { color: "#9CA3AF" },
       },
       x: {
         grid: { color: "rgba(255,255,255,0.05)" },
-        ticks: { color: "#9CA3AF" }
-      }
-    }
+        ticks: { color: "#9CA3AF" },
+      },
+    },
   };
 
   const doughnutOptions = {
@@ -197,10 +230,10 @@ const Dashboard = () => {
         labels: {
           color: "#9CA3AF",
           font: { size: 12 },
-          padding: 15
-        }
-      }
-    }
+          padding: 15,
+        },
+      },
+    },
   };
 
   return (
@@ -304,17 +337,25 @@ const Dashboard = () => {
           <div className={styles.statusGrid}>
             <div className={styles.statusItem}>
               <span className={styles.statusLabel}>Status</span>
-              <span className={`${styles.statusValue} ${data.status.tracking ? styles.active : styles.idle}`}>
+              <span
+                className={`${styles.statusValue} ${
+                  data.status.tracking ? styles.active : styles.idle
+                }`}
+              >
                 {data.status.tracking ? "🟢 Tracking" : "⚪ Idle"}
               </span>
             </div>
             <div className={styles.statusItem}>
               <span className={styles.statusLabel}>Current Task</span>
-              <span className={styles.statusValue}>{data.status.currentTask}</span>
+              <span className={styles.statusValue}>
+                {data.status.currentTask}
+              </span>
             </div>
             <div className={styles.statusItem}>
               <span className={styles.statusLabel}>Tracker OFF Time</span>
-              <span className={styles.statusValue}>{data.status.trackerOffTime}</span>
+              <span className={styles.statusValue}>
+                {data.status.trackerOffTime}
+              </span>
             </div>
             <div className={styles.statusItem}>
               <span className={styles.statusLabel}>Last Active</span>
@@ -329,7 +370,9 @@ const Dashboard = () => {
         <div className={styles.card}>
           <div className={styles.cardHeader}>
             <h3>Productivity Score</h3>
-            <span className={styles.scoreNumber}>{data.productivity.score}%</span>
+            <span className={styles.scoreNumber}>
+              {data.productivity.score}%
+            </span>
           </div>
           <div className={styles.progressWrapper}>
             <div className={styles.progressBar}>
@@ -346,21 +389,27 @@ const Dashboard = () => {
               <div className={styles.statIcon}>⏱️</div>
               <div>
                 <p className={styles.statLabel}>Total Time</p>
-                <p className={styles.statValue}>{data.productivity.totalTime}</p>
+                <p className={styles.statValue}>
+                  {data.productivity.totalTime}
+                </p>
               </div>
             </div>
             <div className={styles.statItem}>
               <div className={styles.statIcon}>✅</div>
               <div>
                 <p className={styles.statLabel}>Productive</p>
-                <p className={styles.statValue}>{data.productivity.productiveTime}</p>
+                <p className={styles.statValue}>
+                  {data.productivity.productiveTime}
+                </p>
               </div>
             </div>
             <div className={styles.statItem}>
               <div className={styles.statIcon}>⚠️</div>
               <div>
                 <p className={styles.statLabel}>Wasted</p>
-                <p className={styles.statValue}>{data.productivity.wastedTime}</p>
+                <p className={styles.statValue}>
+                  {data.productivity.wastedTime}
+                </p>
               </div>
             </div>
           </div>
@@ -441,9 +490,13 @@ const Dashboard = () => {
 
       {/* Action Buttons */}
       <div className={styles.actionButtons}>
-        <button className={styles.startButton} onClick={handleStartTracking}>
-          <span className={styles.buttonIcon}>▶️</span>
-          <span>Start AI Tracking</span>
+        <button className={styles.startButton} onClick={toggleTracking}>
+          <span className={styles.buttonIcon}>
+            {data.status.tracking ? "⏹️" : "▶️"}
+          </span>
+          <span>
+            {data.status.tracking ? "Stop AI Tracking" : "Start AI Tracking"}
+          </span>
           <div className={styles.buttonGlow}></div>
         </button>
 
