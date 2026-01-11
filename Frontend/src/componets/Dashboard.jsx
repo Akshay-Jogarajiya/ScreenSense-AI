@@ -12,6 +12,7 @@ import {
 import jsPDF from "jspdf";
 import styles from "./Dashboard.module.css";
 import { Navigate, useNavigate } from "react-router-dom";
+import { LogOut } from "lucide-react";
 
 ChartJS.register(
   CategoryScale,
@@ -71,7 +72,7 @@ const Dashboard = () => {
   };
   const toggleTracking = async () => {
     const isTracking = data.status.tracking;
-const userId = localStorage.getItem('userId');
+    const userId = localStorage.getItem("userId");
     const endpoint = isTracking
       ? "https://unslayable-unfelicitous-karl.ngrok-free.dev/api/tracking/disable"
       : "https://unslayable-unfelicitous-karl.ngrok-free.dev/api/tracking/enable";
@@ -108,6 +109,11 @@ const userId = localStorage.getItem('userId');
 
   const handleEditProfile = () => {
     navigate("/profile");
+  };
+
+  const handleLogout = () => {
+    localStorage.clear(); // or remove token/userId only
+    navigate("/login");
   };
 
   const downloadWeeklyReport = () => {
@@ -303,24 +309,16 @@ const userId = localStorage.getItem('userId');
             </span>
           </div>
         </div>
-        <button className={styles.editBtn} onClick={handleEditProfile}>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </button>
+        <div className={styles.profileActions}>
+          <button className={styles.editBtn} onClick={handleEditProfile}>
+            ✏️ Edit Profile
+          </button>
+
+          <button className={styles.logoutBtn} onClick={handleLogout}>
+            <LogOut size={18} />
+            <span>Logout</span>
+          </button>
+        </div>
       </div>
 
       {/* Grid Layout */}
