@@ -17,7 +17,7 @@ public class GeminiServiceImpl implements GeminiService {
     private String apiKey;
 
     private static final String GEMINI_URL =
-            "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=";
+            "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
 
     public String analyzeProductivity(String prompt) {
 
@@ -30,8 +30,9 @@ public class GeminiServiceImpl implements GeminiService {
                 })
         });
 
+        String url = GEMINI_URL + "?key=" + apiKey;
         Map response = restTemplate.postForObject(
-                GEMINI_URL + apiKey,
+                url,
                 body,
                 Map.class
         );
