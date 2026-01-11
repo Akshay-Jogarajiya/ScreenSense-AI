@@ -6,6 +6,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Data
 public class User {
@@ -29,4 +31,7 @@ public class User {
     private String goal;
 
     private String time;
+
+    private LocalDateTime createdAt;
+
 }

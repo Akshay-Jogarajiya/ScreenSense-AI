@@ -72,10 +72,10 @@ public class UserController {
         return ResponseEntity.ok(profileResponse);
     }
 
-    @PutMapping("/profile/update/{email}")
-    public ResponseEntity<String> updateProfile(@PathVariable String email, @RequestBody ProfileUpdateRequest profileUpdateRequest) {
+    @PutMapping("/profile/update/{userId}")
+    public ResponseEntity<String> updateProfile(@PathVariable int userId, @RequestBody ProfileUpdateRequest profileUpdateRequest) {
 
-        String message = userService.updateProfile(email, profileUpdateRequest);
+        String message = userService.updateProfile(userId, profileUpdateRequest);
         return ResponseEntity.ok(message);
     }
 }

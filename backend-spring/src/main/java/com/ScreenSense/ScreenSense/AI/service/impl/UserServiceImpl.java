@@ -49,9 +49,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String updateProfile(String email, ProfileUpdateRequest profileUpdateRequest) {
+    public String updateProfile(int userId, ProfileUpdateRequest profileUpdateRequest) {
 
-        Optional<User> user = userRepo.findByEmail(email);
+        Optional<User> user = userRepo.findById(userId);
         if(user.isPresent()){
             User userData = user.get();
             userData.setName(profileUpdateRequest.getName());

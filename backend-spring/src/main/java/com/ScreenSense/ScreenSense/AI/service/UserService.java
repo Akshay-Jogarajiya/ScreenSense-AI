@@ -16,5 +16,5 @@ public interface UserService {
 
     public ProfileResponse getProfile(int userId);
 
-    public String updateProfile(String email, ProfileUpdateRequest profileUpdateRequest);
+    public String updateProfile(int userId, ProfileUpdateRequest profileUpdateRequest);
 }
