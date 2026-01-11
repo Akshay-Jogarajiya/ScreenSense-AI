@@ -2,6 +2,7 @@ package com.ScreenSense.ScreenSense.AI.service.impl;
 
 import com.ScreenSense.ScreenSense.AI.dto.LoginRequest;
 import com.ScreenSense.ScreenSense.AI.dto.ProfileResponse;
+import com.ScreenSense.ScreenSense.AI.dto.ProfileUpdateRequest;
 import com.ScreenSense.ScreenSense.AI.entity.User;
 import com.ScreenSense.ScreenSense.AI.repo.UserRepo;
 import com.ScreenSense.ScreenSense.AI.service.UserService;
@@ -21,17 +22,16 @@ public class UserServiceImpl implements UserService {
     ModelMapper modelMapper = new ModelMapper();
 
     @Override
-    public boolean login(LoginRequest loginRequest) {
+    public User login(LoginRequest loginRequest) {
 
-        Optional<User> user = userRepo.findByEmailAndPassword(loginRequest.getEmail(), loginRequest.getPassword());
-        return user.isPresent();
+        Optional<User> user = userRepo.findByEmail(loginRequest.getEmail());
+        return user.orElse(null);
     }
 
     @Override
-    public boolean register(User user) {
+    public User register(User user) {
 
-        userRepo.save(user);
-        return true;
+        return userRepo.save(user);
     }
 
     @Override
@@ -41,10 +41,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ProfileResponse getProfile(String email) {
+    public ProfileResponse getProfile(int userId) {
 
-        Optional<User> user =  userRepo.findByEmail(email);
+        Optional<User> user =  userRepo.findById(userId);
 
         return user.map(value -> modelMapper.map(value, ProfileResponse.class)).orElse(null);
+    }
+
+    @Override
+    public String updateProfile(int userId, ProfileUpdateRequest profileUpdateRequest) {
+
+        Optional<User> user = userRepo.findById(userId);
+        if(user.isPresent()){
+            User userData = user.get();
+            userData.setName(profileUpdateRequest.getName());
+            userData.setAge(profileUpdateRequest.getAge());
+            userData.setGender(profileUpdateRequest.getGender());
+            userData.setGoal(profileUpdateRequest.getGoal());
+            userData.setTime(profileUpdateRequest.getTime());
+            userData.setDeviceType(profileUpdateRequest.getDeviceType());
+            userRepo.save(userData);
+            return "Profile updated successfully";
+        }
+        return "Profile not found";
     }
 }
